@@ -1,5 +1,5 @@
-#Script Sauvegarde quotidienne des Users sur le dossier sauvegarde sur le serveur 
-# Version 1.0
+#Script Sauvegarde quotidienne des Dossiers  Users depuis les PCs sur le dossier sauvegarde sur le serveur 
+# Version 1.1
 # Auteur : FX BLADIER
 
 
@@ -19,4 +19,5 @@ $thepc= $thepc -replace '"',''
 # /Y :Supprime la demande de confirmation de remplacement de fichiers de destination existants.
            
 xcopy "\\$thepc\C$\Users" "S:\Sauvegarde\$thepc\" /M /E /G /Y
+Write-Host "La copie à été effectuée" 
 }   
