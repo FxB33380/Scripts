@@ -3,21 +3,34 @@
 # Auteur : FX BLADIER
 
 
- #On rÈcupËre la liste des PC de l'AD
+#On r√©cup√®re la liste des PC de l'AD
 $PCS = dsquery computer  "OU=immeuble,DC=acmegroup,DC=fr" -o rdn
+$nbpctotal = $pcs.Count
+$nbpcsauvegardes = 0
+Foreach ($thepc in $PCS) {
+    #suppression des ""
+    $thepc = $thepc -replace '"', ''
 
-Foreach($thepc in $PCS)
-{
-
-#suppression des ""
-$thepc= $thepc -replace '"',''
-
-#Pour chaque PC de la liste,  on rÈcuprËre les donnÈes 
-# /M :copie les fichers avec attribut archive, dÈsactive l'attribut archive.
-# /E :Copie les rÈpertoires et sous-rÈpertoires, y compris les rÈpertoires vides.
-# /G :Permet la copie des fichiers chiffrÈs vers des destinations qui ne prennent pas en charge le chiffrement
-# /Y :Supprime la demande de confirmation de remplacement de fichiers de destination existants.
-           
-xcopy "\\$thepc\C$\Users" "S:\Sauvegarde\$thepc\" /M /E /G /Y
-Write-Host "La copie ‡ ÈtÈ effectuÈe" 
-}   
+    #Pour chaque PC de la liste,  on r√©cupr√®re les donn√©es 
+    # /M :copie les fichers avec attribut archive, d√©sactive l'attribut archive.
+    # /E :Copie les r√©pertoires et sous-r√©pertoires, y compris les r√©pertoires vides.
+    # /G :Permet la copie des fichiers chiffr√©s vers des destinations qui ne prennent pas en charge le chiffrement
+    # /Y :Supprime la demande de confirmation de remplacement de fichiers de destination existants.
+    if (Test-Connection -ComputerName $thepc -Count 1 -Quiet) {        
+        xcopy "\\$thepc\C$\Users" "S:\Sauvegarde\$thepc\" /M /E /G /Y
+        Write-Host "La sauvegarde de $thepc a √©t√© effectu√©e"
+        $nbpcsauvegardes++ 
+    }
+    else {
+        Write-Host "$thepc est √©teint"
+    }
+}
+if ($nbpcsauvegardes -eq $nbpctotal) {
+    Write-EventLog -LogName Application -Source "Backup PCS" -EntryType Information -EventId 1 -Message "Tous les Pcs ont √©t√© sauvergard√©s"
+}
+elseif ($nbpcsauvegardes -eq 0) {
+    Write-EventLog -LogName Application -Source "Backup PCS" -EntryType Error -EventId 1 -Message "Aucun PC sauvegard√©"
+}
+else {
+    Write-EventLog -LogName Application -Source "Backup PCS" -EntryType Warning -EventId 1 -Message "$nbpcsauvegardes / $nbpctotal PCS sauvegard√©s"
+}
