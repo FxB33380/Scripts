@@ -1,5 +1,5 @@
 ﻿#Recherche des groupes dont l'utilisateur est membre
-# Version 1.0
+# Version 2.0
 # Auteur : FX BLADIER 
 
 
