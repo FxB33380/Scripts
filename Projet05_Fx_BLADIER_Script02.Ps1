@@ -1,5 +1,5 @@
 # Création du script pour lister les membres d'un groupe avec export CSV
-# Version 1.0
+# Version 2.0
 # Auteur : FX BLADIER 
 
 # Importation de l'Active Directory
