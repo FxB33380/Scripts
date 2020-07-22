@@ -1,5 +1,5 @@
 #Script création utilisateur et dossier 
-# Version 1.0
+# Version 2.0
 # Auteur : FX BLADIER 
 
 #Renseignement de l'identité de l'utilisateur a créer 
