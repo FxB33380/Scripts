@@ -1,4 +1,4 @@
-# Création du script pour lister les membres d'un groupe avec export CSV
+# CrÃ©ation du script pour lister les membres d'un groupe avec export CSV
 # Version 1.0
 # Auteur : FX BLADIER 
 
@@ -6,14 +6,14 @@
 
 Import-Module ActiveDirectory
 
-#Création de la fonction continue 
+#CrÃ©ation de la fonction continue 
 
 $continue = "yes"
 while(($continue -eq "yes") -or ($continue -eq "y") -or ($continue -eq "oui") -or ($continue -eq "o")){
 
 # Renseignement du groupe  extraire
 
-$groupe = Read-Host "Merci de renseigner le nom du groupe à exporter"
+$groupe = Read-Host "Merci de renseigner le nom du groupe Ã  exporter"
  
   if($groupe -like "DM")
 {
@@ -47,13 +47,13 @@ $groupe = Read-Host "Merci de renseigner le nom du groupe à exporter"
 }
 else
 {
-echo " l'export ne peut pas être réalisé car le groupe n'existe pas sur le Domaine"
+Write-Host " l'export ne peut pas Ãªtre rÃ©alisÃ© car le groupe n'existe pas sur le Domaine"
 exit 1 
 }
-#Création du Fichier d'export CSV
+#CrÃ©ation du Fichier d'export CSV
 
-Get-ADGroupMember -identity $groupe |select name | sort-object -property name| Export-csv -Encoding UTF8 -path $path'-Membres.txt' -Delimiter ";" -NoTypeInformation
-echo "L'export s'est correctement terminé"
+Get-ADGroupMember -identity $groupe |Select-Object name | sort-object -property name| Export-csv -Encoding UTF8 -path $path'-Membres.txt' -Delimiter ";" -NoTypeInformation
+Write-Host "L'export s'est correctement terminÃ©"
 $continue = Read-Host "voulez-vous continuer Oui ou non ?"
 }
 
