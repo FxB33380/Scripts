@@ -1,74 +1,67 @@
-#Script création utilisateur et dossier 
+#Script crÃ©ation utilisateur et dossier 
 # Version 1.0
 # Auteur : FX BLADIER 
 
-$nom = Read-Host "Merci de Rentrer le Nom de l’Utilisateur à Créer"
+#Renseignement de l'identitÃ© de l'utilisateur a crÃ©er 
 
-$prenom = Read-Host "Merci de Rentrer le Prénom de l’Utilisateur à Créer"
+$nom = Read-Host "Merci de Rentrer le Nom de l'Utilisateur Ã  CrÃ©er"
+
+$prenom = Read-Host "Merci de Rentrer le PrÃ©nom de l'Utilisateur Ã  CrÃ©er"
 
 $nomComplet = "$($prenom) $($nom)"
 
 $login = "$($prenom.Substring(0,1)).$($nom)".ToLower()
 
-#vérification du mot de passe
+#vÃ©rification du mot de passe
 
-$mdp = Read-Host "Merci de Rentrer le Mot de Passe Provisoire de l’Utilisateur à Créer, l'utilisateur le changera à sa première connexion"
+$mdp = Read-Host "Merci de Rentrer le Mot de Passe Provisoire de l'Utilisateur Ã  CrÃ©er, l'utilisateur le changera Ã  sa premiÃ¨re connexion"
 
-if ($mdp -cnotmatch "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")
-{
-Write-Host "le mot de passe ne correspond pas aux exigences"
-exit 1
+if ($mdp -cnotmatch "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$") {
+    Write-Host "le mot de passe ne correspond pas aux exigences"
+    exit 1
 }
-$groupe = Read-Host "Merci de Rentrer le nom du groupe à attribuer à cet utilisateur"
+$groupe = Read-Host "Merci de Rentrer le nom du groupe Ã  attribuer Ã  cet utilisateur"
 
 $OU = $groupe
 
-# Création du dossier utilisateur suvant l'indication du goupe utilisateur
+# CrÃ©ation du dossier utilisateur suvant l'indication du goupe utilisateur
 
-if($groupe -like "DM")
-{
-    $dossier ='S:\Données\DIRECTION MARKETING'
-    }
-    elseif ($groupe -like "Accueil")
-{
-    $dossier ='S:\Données\ACCUEIL'
-    }
-     elseif ($groupe -like "DIF")
-{
-    $dossier ='S:\Données\DIRECTION FINANCIERE'
-    }
-         elseif ($groupe -like "DG")
-{
-    $dossier ='S:\Données\DIRECTION GENERALE'
-    }
-           elseif ($groupe -like "DRH")
-{
-    $dossier ='S:\Données\DIRECTION RESSOURCES HUMAINES'
-    }
-               elseif ($groupe  -like "DRT")
-{
-   $dossier ='S:\Données\DIRECTION TECHNIQUE'   
+if ($groupe -like "DM") {
+    $dossier = 'S:\DonnÃ©es\DIRECTION MARKETING'
+}
+elseif ($groupe -like "Accueil") {
+    $dossier = 'S:\DonnÃ©es\ACCUEIL'
+}
+elseif ($groupe -like "DIF") {
+    $dossier = 'S:\DonnÃ©es\DIRECTION FINANCIERE'
+}
+elseif ($groupe -like "DG") {
+    $dossier = 'S:\DonnÃ©es\DIRECTION GENERALE'
+}
+elseif ($groupe -like "DRH") {
+    $dossier = 'S:\DonnÃ©es\DIRECTION RESSOURCES HUMAINES'
+}
+elseif ($groupe -like "DRT") {
+    $dossier = 'S:\DonnÃ©es\DIRECTION TECHNIQUE'   
 
 }
-               elseif ($groupe  -like "Stagiaires")
-{
-   $dossier ='S:\Données\STAGIAIRES'   
+elseif ($groupe -like "Stagiaires") {
+    $dossier = 'S:\DonnÃ©es\STAGIAIRES'   
 
 }
 
-# si le groupe n'existe pas le dossier est créé à la racine 
+# si le groupe n'existe pas le dossier est crÃ©Ã© Ã  la racine 
 
-else
-{
-$dossier =‘S:\Données'
+else {
+    $dossier = 'S:\DonnÃ©es'
 }
 
-# Création du dossier 
+# CrÃ©ation du dossier 
 New-Item -ItemType directory -Name $login -Path $dossier
 
 
-# Création de l'utilisateur et intégration de ce dernier dans le groupe désigné 
+# CrÃ©ation de l'utilisateur et intÃ©gration de ce dernier dans le groupe dÃ©signÃ© 
 
-New-ADUser -Name $nomComplet -SamAccountName $login -UserPrincipalName $login@acmegroup.fr -AccountPassword (ConvertTo-SecureString -AsPlainText $mdp -Force) -PasswordNeverExpires $false -CannotChangePassword $false -ChangePasswordAtLogon $true -Enabled $true -Path "OU=$OU,OU=Immeuble,DC=acmegroup,DC=fr"
-Add-ADGroupMember -identity $groupe -Members $login
+    New-ADUser -Name $nomComplet -SamAccountName $login -UserPrincipalName $login@acmegroup.fr -AccountPassword (ConvertTo-SecureString -AsPlainText $mdp -Force) -PasswordNeverExpires $false -CannotChangePassword $false -ChangePasswordAtLogon $true -Enabled $true -Path "OU=$OU,OU=Immeuble,DC=acmegroup,DC=fr"
+    Add-ADGroupMember -identity $groupe -Members $login
 
