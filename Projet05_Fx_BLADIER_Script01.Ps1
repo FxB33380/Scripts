@@ -62,6 +62,6 @@ New-Item -ItemType directory -Name $login -Path $dossier
 
 # Création de l'utilisateur et intégration de ce dernier dans le groupe désigné 
 
-    New-ADUser -Name $nomComplet -SamAccountName $login -UserPrincipalName $login@acmegroup.fr -AccountPassword (ConvertTo-SecureString -AsPlainText $mdp -Force) -PasswordNeverExpires $false -CannotChangePassword $false -ChangePasswordAtLogon $true -Enabled $true -Path "OU=$OU,OU=Immeuble,DC=acmegroup,DC=fr"
-    Add-ADGroupMember -identity $groupe -Members $login
+New-ADUser -Name $nomComplet -SamAccountName $login -UserPrincipalName $login@acmegroup.fr -AccountPassword (ConvertTo-SecureString -AsPlainText $mdp -Force) -PasswordNeverExpires $false -CannotChangePassword $false -ChangePasswordAtLogon $true -Enabled $true -Path "OU=$OU,OU=Immeuble,DC=acmegroup,DC=fr"
+Add-ADGroupMember -identity $groupe -Members $login
 
