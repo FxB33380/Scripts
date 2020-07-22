@@ -1,5 +1,5 @@
 #Script Sauvegarde quotidienne des Dossiers  Users depuis les PCs sur le dossier sauvegarde sur le serveur 
-# Version 1.1
+# Version 2.0
 # Auteur : FX BLADIER
 
 
